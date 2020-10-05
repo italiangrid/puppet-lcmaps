@@ -1,0 +1,11 @@
+<%-
+@pools.each do | pool |
+  @vo_name=pool['vo']
+  @pool_name=pool['name']
+  @voms_role=pool['role']
+-%>
+"/<%=@vo_name%>/Role=<%=@voms_role%>/Capability=NULL" .<%=@pool_name%>
+"/<%=@vo_name%>" .<%=@pool_name%>
+<%- 
+end
+-%>
