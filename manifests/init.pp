@@ -67,7 +67,7 @@ class lcmaps (
   String $gridmapdir_group = 'storm',
   String $gridmapdir_mode = '0770',
 
-  Array[Data] $pools = [{
+  Array[Lcmaps::PoolData] $pools = [{
     'name' => 'tstvo',
     'size' => 20,
     'base_uid' => 7100,
@@ -75,7 +75,6 @@ class lcmaps (
     'groups' => ['testvo'],
     'gid' => 7100,
     'vo' => 'test.vo',
-    'role' => 'NULL',
   },{
     'name' => 'testdue',
     'size' => 20,
@@ -84,7 +83,6 @@ class lcmaps (
     'groups' => ['testvodue'],
     'gid' => 8100,
     'vo' => 'test.vo.2',
-    'role' => 'NULL',
   }],
 
   Boolean $generate_gridmapfile = true,

@@ -93,6 +93,34 @@ describe 'lcmaps' do
           
         end
 
+        context 'with custom pool accounts' do
+          let(:params) do
+            {
+              'pools' => [
+                'name' => 'test',
+                'size' => 10,
+                'base_uid' => 1,
+                'group' => 'g1',
+                'groups' => ['g1', 'g2'],
+                'gid' => 10,
+                'vo' => 'vo',
+                'role' => 'admin',
+                'capability' => 'admin'
+              ],
+            }
+          end
+
+          it "check groupmapfile content" do
+            is_expected.to contain_file(groupmapfile).with( :content => /"\/vo\/Role=admin\/Capability=admin" g1/ )
+            is_expected.to contain_file(groupmapfile).with( :content => /"\/vo" g1/ )
+          end
+
+          it "check grid-mapfile content" do
+            is_expected.to contain_file(gridmapfile).with( :content => /"\/vo\/Role=admin\/Capability=admin" .test/ )
+            is_expected.to contain_file(gridmapfile).with( :content => /"\/vo" .test/ )
+          end
+        end
+
       end
     end
   end

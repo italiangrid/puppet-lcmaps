@@ -2,9 +2,16 @@
 @pools.each do | pool |
   @vo_name=pool['vo']
   @pool_name=pool['name']
-  @voms_role=pool['role']
+  @role=pool['role']
+  if @role == nil
+    @role = "NULL"
+  end
+  @capability=pool['capability']
+  if @capability == nil
+    @capability = "NULL"
+  end
 -%>
-"/<%=@vo_name%>/Role=<%=@voms_role%>/Capability=NULL" .<%=@pool_name%>
+"/<%=@vo_name%>/Role=<%=@role%>/Capability=<%=@capability%>" .<%=@pool_name%>
 "/<%=@vo_name%>" .<%=@pool_name%>
 <%- 
 end
