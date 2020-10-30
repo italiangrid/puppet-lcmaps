@@ -72,7 +72,6 @@ class lcmaps (
     'size' => 20,
     'base_uid' => 7100,
     'group' => 'testvo',
-    'groups' => ['testvo'],
     'gid' => 7100,
     'vo' => 'test.vo',
   },{
@@ -80,7 +79,6 @@ class lcmaps (
     'size' => 20,
     'base_uid' => 8100,
     'group' => 'testvodue',
-    'groups' => ['testvodue'],
     'gid' => 8100,
     'vo' => 'test.vo.2',
   }],
@@ -129,11 +127,26 @@ class lcmaps (
 
   $pools.each | $pool | {
 
-    group { $pool['group']:
-      ensure => present,
-      gid    => $pool['gid'],
+    # mandatories
+    $pool_name = $pool['name']
+    $pool_group = $pool['group']
+    $pool_gid = $pool['gid']
+    $pool_vo = $pool['vo']
+    $pool_base_uid = $pool['base_uid']
+    $pool_size = $pool['size']
+
+    # optionals
+    if has_key($pool, 'groups') {
+      $pool_groups = $pool['groups']
+    } else {
+      $pool_groups = [$pool_group]
     }
-    $pool['groups'].each | $g | {
+
+    group { $pool_group:
+      ensure => present,
+      gid    => $pool_gid,
+    }
+    $pool_groups.each | $g | {
       if !defined(Group[$g]) {
         group { $g:
           ensure => present,
@@ -141,19 +154,19 @@ class lcmaps (
       }
     }
 
-    range('1', $pool['size']).each | $id | {
+    range('1', $pool_size).each | $id | {
 
       $id_str = sprintf('%03d', $id)
-      $name = "${pool['name']}${id_str}"
+      $name = "${pool_name}${id_str}"
 
       user { $name:
         ensure     => present,
-        uid        => $pool['base_uid'] + $id,
-        gid        => $pool['gid'],
-        groups     => $pool['groups'],
-        comment    => "Mapped user for ${pool['vo']}",
+        uid        => $pool_base_uid + $id,
+        gid        => $pool_gid,
+        groups     => $pool_groups,
+        comment    => "Mapped user for ${pool_vo}",
         managehome => true,
-        require    => [Group[$pool['group']]],
+        require    => [Group[$pool_group]],
       }
 
       file { "${gridmapdir}/${name}":
