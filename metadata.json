@@ -1,6 +1,6 @@
 {
   "name": "cnafsd-lcmaps",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "author": "cnafsd",
   "summary": "Install and configure LCMAPS and pool accounts",
   "license": "Apache-2.0",
