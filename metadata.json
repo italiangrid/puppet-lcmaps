@@ -1,10 +1,11 @@
 {
   "name": "cnafsd-lcmaps",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "author": "cnafsd",
   "summary": "Install and configure LCMAPS and pool accounts",
   "license": "Apache-2.0",
   "source": "https://github.com/italiangrid/puppet-lcmaps",
+  "project_page": "https://github.com/italiangrid/puppet-lcmaps",
   "dependencies": [
     {
       "name": "puppetlabs-stdlib",

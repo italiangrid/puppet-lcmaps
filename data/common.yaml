@@ -1,1 +1,36 @@
 ---
+lcmaps::gridmapdir_owner: 'storm'
+lcmaps::gridmapdir_group: 'storm'
+lcmaps::gridmapdir_mode: '0770'
+
+lcmaps::pools:
+  - name: 'tstvo'
+    size: 20
+    base_uid: 7100
+    group: 'testvo'
+    gid: 7100
+    vo: 'test.vo'
+  - name: 'testdue'
+    size: 20
+    base_uid: 8100
+    group: 'testvodue'
+    gid: 8100
+    vo: 'test.vo.2'
+
+lcmaps::generate_gridmapfile: true
+lcmaps::gridmapfile_file: ''
+
+lcmaps::generate_groupmapfile: true
+lcmaps::groupmapfile_file: ''
+
+lcmaps::manage_lcmaps_db_file: true
+lcmaps::lcmaps_db_file: 'puppet:///modules/lcmaps/etc/lcmaps/lcmaps.db'
+
+lcmaps::manage_lcas_db_file: true
+lcmaps::lcas_db_file: 'puppet:///modules/lcmaps/etc/lcas/lcas.db'
+
+lcmaps::manage_lcas_ban_users_file: true
+lcmaps::lcas_ban_users_file: 'puppet:///modules/lcmaps/etc/lcas/ban_users.db'
+
+lcmaps::manage_gsi_authz_file: true
+lcmaps::gsi_authz_file: 'puppet:///modules/lcmaps/etc/grid-security/gsi-authz.conf'

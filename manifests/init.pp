@@ -63,43 +63,29 @@
 #
 class lcmaps (
 
-  String $gridmapdir_owner = 'storm',
-  String $gridmapdir_group = 'storm',
-  String $gridmapdir_mode = '0770',
+  String $gridmapdir_owner,
+  String $gridmapdir_group,
+  String $gridmapdir_mode,
 
-  Array[Lcmaps::PoolData] $pools = [{
-    'name' => 'tstvo',
-    'size' => 20,
-    'base_uid' => 7100,
-    'group' => 'testvo',
-    'gid' => 7100,
-    'vo' => 'test.vo',
-  },{
-    'name' => 'testdue',
-    'size' => 20,
-    'base_uid' => 8100,
-    'group' => 'testvodue',
-    'gid' => 8100,
-    'vo' => 'test.vo.2',
-  }],
+  Array[Lcmaps::PoolData] $pools,
 
-  Boolean $generate_gridmapfile = true,
-  String $gridmapfile_file = '',
+  Boolean $generate_gridmapfile,
+  String $gridmapfile_file,
 
-  Boolean $generate_groupmapfile = true,
-  String $groupmapfile_file = '',
+  Boolean $generate_groupmapfile,
+  String $groupmapfile_file,
 
-  Boolean $manage_lcmaps_db_file = true,
-  String $lcmaps_db_file = 'puppet:///modules/lcmaps/etc/lcmaps/lcmaps.db',
+  Boolean $manage_lcmaps_db_file,
+  String $lcmaps_db_file,
 
-  Boolean $manage_lcas_db_file = true,
-  String $lcas_db_file = 'puppet:///modules/lcmaps/etc/lcas/lcas.db',
+  Boolean $manage_lcas_db_file,
+  String $lcas_db_file,
 
-  Boolean $manage_lcas_ban_users_file = true,
-  String $lcas_ban_users_file = 'puppet:///modules/lcmaps/etc/lcas/ban_users.db',
+  Boolean $manage_lcas_ban_users_file,
+  String $lcas_ban_users_file,
 
-  Boolean $manage_gsi_authz_file = true,
-  String $gsi_authz_file = 'puppet:///modules/lcmaps/etc/grid-security/gsi-authz.conf',
+  Boolean $manage_gsi_authz_file,
+  String $gsi_authz_file,
 
 ) {
 
