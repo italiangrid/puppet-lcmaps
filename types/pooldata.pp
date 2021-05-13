@@ -6,6 +6,6 @@ type Lcmaps::PoolData = Struct[{
   gid        => Integer,
   vo         => String,
   groups     => Optional[Array[String]],
-  role       => Optional[String],
+  roles      => Optional[Array[String]],
   capability => Optional[String],
 }]

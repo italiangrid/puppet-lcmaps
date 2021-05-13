@@ -2,17 +2,16 @@
 @pools.each do | pool |
   @vo_name=pool['vo']
   @group=pool['group']
-  @role=pool['role']
-  if @role == nil
-    @role = "NULL"
-  end
   @capability=pool['capability']
   if @capability == nil
     @capability = "NULL"
   end
+  @roles=pool['roles']
+  @roles.each do | role |
 -%>
-"/<%=@vo_name%>/Role=<%=@role%>/Capability=<%=@capability%>" <%=@group%>
+"/<%=@vo_name%>/Role=<%=role%>/Capability=<%=@capability%>" <%=@group%>
 "/<%=@vo_name%>" <%=@group%>
 <%- 
+  end
 end
 -%>
