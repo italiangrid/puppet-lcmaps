@@ -12,10 +12,10 @@
   end
   @capability=pool['capability']
   if @capability == nil
-    @capability1 = "Capability=NULL"
+    @capability1 = "/Capability=NULL"
     @capability2 = ""
   else
-    @capability1 = "Capability=#{@capability}"
+    @capability1 = "/Capability=#{@capability}"
     @capability2 = @capability1
   end
 -%>
