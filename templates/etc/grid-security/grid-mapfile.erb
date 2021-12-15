@@ -4,15 +4,23 @@
   @pool_name=pool['name']
   @role=pool['role']
   if @role == nil
-    @role = "NULL"
+    @role1 = "/Role=NULL"
+    @role2 = ""
+  else
+    @role1 = "/Role=#{@role}"
+    @role2 = @role1
   end
   @capability=pool['capability']
   if @capability == nil
-    @capability = "NULL"
+    @capability1 = "/Capability=NULL"
+    @capability2 = ""
+  else
+    @capability1 = "/Capability=#{@capability}"
+    @capability2 = @capability1
   end
 -%>
-"/<%=@vo_name%>/Role=<%=@role%>/Capability=<%=@capability%>" .<%=@pool_name%>
-"/<%=@vo_name%>" .<%=@pool_name%>
+"/<%=@vo_name%><%=@role1%><%=@capability1%>" .<%=@pool_name%>
+"/<%=@vo_name%><%=@role2%><%=@capability2%>" .<%=@pool_name%>
 <%- 
 end
 -%>
