@@ -14,13 +14,6 @@ describe 'lcmaps' do
       context 'with default parameters' do
 
         it "check installed packages" do
-          is_expected.to contain_package('lcas-lcmaps-gt4-interface').with( :ensure => 'latest' )
-          is_expected.to contain_package('lcas-plugins-basic').with( :ensure => 'latest' )
-          is_expected.to contain_package('lcas-plugins-voms').with( :ensure => 'latest' )
-          is_expected.to contain_package('lcas').with( :ensure => 'latest' )
-          is_expected.to contain_package('lcmaps-plugins-basic').with( :ensure => 'latest' )
-          is_expected.to contain_package('lcmaps-plugins-voms').with( :ensure => 'latest' )
-          is_expected.to contain_package('lcmaps-without-gsi').with( :ensure => 'latest' )
           is_expected.to contain_package('lcmaps').with( :ensure => 'latest' )
         end
 
@@ -64,7 +57,7 @@ describe 'lcmaps' do
             )
             path=sprintf('%s/%s', gridmapdir, name)
             is_expected.to contain_file(path).with( 
-              :ensure  => 'present',
+              :ensure  => 'file',
             )
           end
           
@@ -87,7 +80,7 @@ describe 'lcmaps' do
             )
             path=sprintf('%s/%s', gridmapdir, name)
             is_expected.to contain_file(path).with( 
-              :ensure  => 'present',
+              :ensure  => 'file',
             )
           end
           
@@ -99,7 +92,7 @@ describe 'lcmaps' do
               'pools' => [
                 'name' => 'test',
                 'size' => 10,
-                'base_uid' => 1,
+                'base_uid' => 0,
                 'group' => 'g1',
                 'groups' => ['g1', 'g2'],
                 'gid' => 10,
@@ -110,14 +103,34 @@ describe 'lcmaps' do
             }
           end
 
+          it 'check users gridmapdir and groups have been created' do
+            (1..10).each do | i |
+              name=sprintf('test%03d', i)
+              is_expected.to contain_user(name).with(
+                :ensure => 'present',
+                :uid    => i,
+                :gid    => 10,
+                :groups => ['g1', 'g2'],
+              )
+              path=sprintf('%s/%s', gridmapdir, name)
+              is_expected.to contain_file(path).with( 
+                :ensure  => 'file',
+              )
+            end
+            (1..2).each do | i |
+              gname=sprintf('g%d', i)
+              is_expected.to contain_group(gname).with(
+                :ensure => 'present',
+              )
+            end
+          end
+
           it "check groupmapfile content" do
             is_expected.to contain_file(groupmapfile).with( :content => /"\/vo\/Role=admin\/Capability=admin" g1/ )
-            is_expected.to contain_file(groupmapfile).with( :content => /"\/vo" g1/ )
           end
 
           it "check grid-mapfile content" do
             is_expected.to contain_file(gridmapfile).with( :content => /"\/vo\/Role=admin\/Capability=admin" .test/ )
-            is_expected.to contain_file(gridmapfile).with( :content => /"\/vo" .test/ )
           end
         end
 

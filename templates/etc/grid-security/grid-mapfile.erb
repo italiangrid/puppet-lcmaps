@@ -3,24 +3,22 @@
   @vo_name=pool['vo']
   @pool_name=pool['name']
   @role=pool['role']
-  if @role == nil
-    @role1 = "/Role=NULL"
-    @role2 = ""
-  else
-    @role1 = "/Role=#{@role}"
-    @role2 = @role1
-  end
+  @role1 = @role == nil ?  "/Role=NULL" : "/Role=#{@role}"
+  @role2 = @role == nil ?  "" : "/Role=#{@role}"
   @capability=pool['capability']
-  if @capability == nil
-    @capability1 = "/Capability=NULL"
-    @capability2 = ""
-  else
-    @capability1 = "/Capability=#{@capability}"
-    @capability2 = @capability1
-  end
+  @capability1 = @capability == nil ? "/Capability=NULL" : "/Capability=#{@capability}"
+  @capability2 = @capability == nil ? "" : "/Capability=#{@capability}"
+  @line1 = "\"/#{@vo_name}#{@role1}#{@capability1}\" .#{@pool_name}"
+  @line2 = "\"/#{@vo_name}#{@role2}#{@capability2}\" .#{@pool_name}"
+  if (@line1 == @line2)
 -%>
-"/<%=@vo_name%><%=@role1%><%=@capability1%>" .<%=@pool_name%>
-"/<%=@vo_name%><%=@role2%><%=@capability2%>" .<%=@pool_name%>
-<%- 
+<%=@line1%>
+<%-
+  else
+-%>
+<%=@line1%>
+<%=@line2%>
+<%-
+  end
 end
 -%>

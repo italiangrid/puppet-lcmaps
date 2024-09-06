@@ -16,7 +16,7 @@
 #
 # @param gridmapfile_file
 #
-# @param generate_groumapfile
+# @param generate_groupmapfile
 #
 # @param groupmapfile_file
 #
@@ -26,20 +26,6 @@
 #
 # @param lcmaps_db_file
 #   The path of the lcmaps.db to copy into /etc/lcmaps/lcmaps.db. Default: puppet:///modules/storm/etc/lcmaps/lcmaps.db
-#
-# @param manage_lcas_db_file
-#   If true (default) use as /etc/lcas/lcas.db the file specified with lcas_db_file.
-#   If false, file is not managed by this class.
-#
-# @param lcas_db_file
-#   The path of the lcas.db to copy into /etc/lcas/lcas.db. Default: puppet:///modules/storm/etc/lcas/lcas.db
-#
-# @param manage_lcas_ban_users_file
-#   If true (default) use as /etc/lcas/ban_users.db the file specified with lcas_ban_users_file.
-#   If false, file is not managed by this class.
-#
-# @param lcas_ban_users_file
-#   The path of the ban_users.db to copy into /etc/lcas/ban_users.db. Default: puppet:///modules/storm/etc/lcas/ban_users.db
 #
 # @param manage_gsi_authz_file
 #   If true (default) use as /etc/grid-security/gsi-authz.conf the file specified with gsi_authz_file.
@@ -78,24 +64,12 @@ class lcmaps (
   Boolean $manage_lcmaps_db_file,
   String $lcmaps_db_file,
 
-  Boolean $manage_lcas_db_file,
-  String $lcas_db_file,
-
-  Boolean $manage_lcas_ban_users_file,
-  String $lcas_ban_users_file,
-
   Boolean $manage_gsi_authz_file,
   String $gsi_authz_file,
 
 ) {
-
-  $lcamps_rpms = ['lcmaps', 'lcmaps-without-gsi', 'lcmaps-plugins-basic', 'lcmaps-plugins-voms']
+  $lcamps_rpms = ['lcmaps', 'lcmaps-without-gsi']
   package { $lcamps_rpms:
-    ensure => latest,
-  }
-
-  $lcas_rpms = ['lcas', 'lcas-lcmaps-gt4-interface', 'lcas-plugins-basic', 'lcas-plugins-voms']
-  package { $lcas_rpms:
     ensure => latest,
   }
 
@@ -112,7 +86,6 @@ class lcmaps (
   }
 
   $pools.each | $pool | {
-
     # mandatories
     $pool_name = $pool['name']
     $pool_group = $pool['group']
@@ -122,7 +95,7 @@ class lcmaps (
     $pool_size = $pool['size']
 
     # optionals
-    if has_key($pool, 'groups') {
+    if ('groups' in $pool) {
       $pool_groups = $pool['groups']
     } else {
       $pool_groups = [$pool_group]
@@ -141,7 +114,6 @@ class lcmaps (
     }
 
     range('1', $pool_size).each | $id | {
-
       $id_str = sprintf('%03d', $id)
       $name = "${pool_name}${id_str}"
 
@@ -156,7 +128,7 @@ class lcmaps (
       }
 
       file { "${gridmapdir}/${name}":
-        ensure  => present,
+        ensure  => file,
         require => File[$gridmapdir],
         owner   => $gridmapdir_owner,
         group   => $gridmapdir_group,
@@ -169,7 +141,7 @@ class lcmaps (
 
   if $generate_gridmapfile {
     file { $gridmapfile:
-      ensure  => present,
+      ensure  => file,
       content => template($gridmapfile_template),
       owner   => 'root',
       group   => 'root',
@@ -177,7 +149,7 @@ class lcmaps (
     }
   } else {
     file { $gridmapfile:
-      ensure => present,
+      ensure => file,
       source => $gridmapfile_file,
       owner  => 'root',
       group  => 'root',
@@ -190,7 +162,7 @@ class lcmaps (
 
   if $generate_groupmapfile {
     file { $groupmapfile:
-      ensure  => present,
+      ensure  => file,
       content => template($groupmapfile_template),
       owner   => 'root',
       group   => 'root',
@@ -198,7 +170,7 @@ class lcmaps (
     }
   } else {
     file { $groupmapfile:
-      ensure => present,
+      ensure => file,
       source => $groupmapfile_file,
       owner  => 'root',
       group  => 'root',
@@ -208,7 +180,7 @@ class lcmaps (
 
   if $manage_gsi_authz_file {
     file { '/etc/grid-security/gsi-authz.conf':
-      ensure => present,
+      ensure => file,
       source => $gsi_authz_file,
       mode   => '0644',
       owner  => 'root',
@@ -218,33 +190,12 @@ class lcmaps (
 
   if $manage_lcmaps_db_file {
     file { '/etc/lcmaps/lcmaps.db':
-      ensure  => present,
+      ensure  => file,
       source  => $lcmaps_db_file,
       mode    => '0644',
       owner   => 'root',
       group   => 'root',
       require => Package[$lcamps_rpms],
-    }
-  }
-
-  if $manage_lcas_db_file {
-    file { '/etc/lcas/lcas.db':
-      ensure  => present,
-      source  => $lcas_db_file,
-      mode    => '0644',
-      owner   => 'root',
-      group   => 'root',
-      require => Package[$lcas_rpms],
-    }
-    if $manage_lcas_ban_users_file {
-      file { '/etc/lcas/ban_users.db':
-        ensure  => present,
-        source  => $lcas_ban_users_file,
-        mode    => '0644',
-        owner   => 'root',
-        group   => 'root',
-        require => File['/etc/lcas/lcas.db'],
-      }
     }
   }
 }
